@@ -84,7 +84,7 @@ public class OneopsHttpClient {
             }
             responseBody = response.body();
             output = responseBody.string();
-            logger.info("Response="+output); 
+            //logger.info("Response="+output); 
             oneopsResponse = new OneopsResponse(output,response.code());
             
             logger.info("************************************************************************************");

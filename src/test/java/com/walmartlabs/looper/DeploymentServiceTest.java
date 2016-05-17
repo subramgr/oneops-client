@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Unit test for 'Deployment' APIs 
  */
-//@Ignore
+@Ignore
 public class DeploymentServiceTest extends BaseTest{
     
     private static final Logger logger = Logger.getLogger(DeploymentServiceTest.class.getName());

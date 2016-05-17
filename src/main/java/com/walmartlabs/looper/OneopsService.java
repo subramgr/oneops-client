@@ -105,7 +105,7 @@ public class OneopsService {
         
         try{
             if (oneopsResponse != null){
-              logger.info("oneopsResponse="+oneopsResponse.toString());
+              //logger.info("oneopsResponse="+oneopsResponse.toString());
               if (oneopsResponse.getResponseStatus() == 200){
                   responseJsonString = oneopsResponse.getOneopsOutputString();
               }else{

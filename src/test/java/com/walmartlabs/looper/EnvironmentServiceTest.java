@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Unit test for 'Environment' APIs 
  */
-//@Ignore
+@Ignore
 public class EnvironmentServiceTest extends BaseTest{
     
     private static final Logger logger = Logger.getLogger(EnvironmentServiceTest.class.getName());
@@ -53,7 +53,7 @@ public class EnvironmentServiceTest extends BaseTest{
                                         .queryParam("environment", oneopsEnv)
                                         .queryParam("platforms", oneopsPlatform)
                                         .queryParam("platform", oneopsPlatform)
-                                        .queryParam("variables", variables)
+                                        .queryParam("variables", oneopsVariables)
                                         .queryParam("cancelActiveDeployment", cancelActiveDeployment)
                                         .queryParam("deployAllPlatforms", deployAllPlatforms)
                                         .queryParam("pollFrequency", pollFrequency);

@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Unit test for 'Platform' APIs 
  */
-//@Ignore
+@Ignore
 public class PlatformServiceTest extends BaseTest{
     
     private static final Logger logger = Logger.getLogger(PlatformServiceTest.class.getName());
@@ -29,10 +29,10 @@ public class PlatformServiceTest extends BaseTest{
         logger.info("###################################   testFindPlatform()");
         
         ResteasyWebTarget target = client.target(platformUrl+"/get")
-                                        .queryParam("organization", organization)
-                                        .queryParam("assembly", assembly)
-                                        .queryParam("environment", environment)
-                                        .queryParam("platform", platform);
+                                        .queryParam("organization", oneopsOrg)
+                                        .queryParam("assembly", oneopsAssembly)
+                                        .queryParam("environment", oneopsEnv)
+                                        .queryParam("platform", oneopsPlatform);
                                         
         
         logger.info("Final url="+target.getUri().toString());
@@ -50,9 +50,9 @@ public class PlatformServiceTest extends BaseTest{
         logger.info("###################################   testFindAllPlatforms()");
         
         ResteasyWebTarget target = client.target(platformUrl+"/get/all")
-                                        .queryParam("organization", organization)
-                                        .queryParam("assembly", assembly)
-                                        .queryParam("environment", environment);
+                                        .queryParam("organization", oneopsOrg)
+                                        .queryParam("assembly", oneopsAssembly)
+                                        .queryParam("environment", oneopsEnv);
                                         
         logger.info("Final url="+target.getUri().toString());
 
@@ -68,9 +68,9 @@ public class PlatformServiceTest extends BaseTest{
         logger.info("###################################   testFindAllPlatformIds()");
         
         ResteasyWebTarget target = client.target(platformUrl+"/get/all/ids")
-                                        .queryParam("organization", organization)
-                                        .queryParam("assembly", assembly)
-                                        .queryParam("environment", environment);
+                                        .queryParam("organization", oneopsOrg)
+                                        .queryParam("assembly", oneopsAssembly)
+                                        .queryParam("environment", oneopsEnv);
                                         
         logger.info("Final url="+target.getUri().toString());
 
@@ -85,10 +85,10 @@ public class PlatformServiceTest extends BaseTest{
     public void testPlatformExcludeList(){
         logger.info("###################################   testPlatformExcludeList()");
         ResteasyWebTarget target = client.target(platformUrl+"/get/exclude/ids")
-                                          .queryParam("organization", organization)
-                                          .queryParam("assembly", assembly)
-                                          .queryParam("environment", environment)
-                                          .queryParam("platformNames", platformNames);
+                                          .queryParam("organization", oneopsOrg)
+                                          .queryParam("assembly", oneopsAssembly)
+                                          .queryParam("environment", oneopsEnv)
+                                          .queryParam("platformNames", oneopsPlatform);
           
         logger.info("Final url="+target.getUri().toString());
         

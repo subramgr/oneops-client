@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.walmartlabs.oneops.model.Release;
 
-//@Ignore
+@Ignore
 public class ReleaseServiceTest extends BaseTest{
   
   private static final Logger logger = Logger.getLogger(ReleaseServiceTest.class.getName());
@@ -25,9 +25,9 @@ public class ReleaseServiceTest extends BaseTest{
     logger.info("###################################   testFindReleaseBom()");
     
     ResteasyWebTarget target = client.target(releaseUrl+"/bom/get")
-                                    .queryParam("organization", organization)
-                                    .queryParam("assembly", assembly)
-                                    .queryParam("environment", environment);
+                                    .queryParam("organization", oneopsOrg)
+                                    .queryParam("assembly", oneopsAssembly)
+                                    .queryParam("environment", oneopsEnv);
     
     logger.info("Final url="+target.getUri().toString());
 

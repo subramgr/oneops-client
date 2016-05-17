@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Unit test for 'Variable' APIs 
  */
-//@Ignore
+@Ignore
 public class VariableServiceTest extends BaseTest{
     
     private static final Logger logger = Logger.getLogger(VariableServiceTest.class.getName());
@@ -81,8 +81,8 @@ public class VariableServiceTest extends BaseTest{
                           .queryParam("assembly", oneopsAssembly)
                           .queryParam("environment", oneopsEnv)
                           .queryParam("platform", oneopsPlatform)
-                          .queryParam("components", components)
-                          .queryParam("variables", variables);
+                          .queryParam("components", oneopsComponents)
+                          .queryParam("variables", oneopsVariables);
 
         logger.info("Final url="+target.getUri().toString());
         
@@ -101,8 +101,8 @@ public class VariableServiceTest extends BaseTest{
                           .queryParam("assembly", oneopsAssembly)
                           .queryParam("environment", oneopsEnv)
                           .queryParam("platform", oneopsPlatform)
-                          .queryParam("components", components)
-                          .queryParam("variables", variables);
+                          .queryParam("components", oneopsComponents)
+                          .queryParam("variables", oneopsVariables);
 
         logger.info("Final url="+target.getUri().toString());
         
