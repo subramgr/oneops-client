@@ -23,62 +23,62 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;*/
 /*@JsonPropertyOrder({
     "errors", "error"
 })*/
-public class ErrorInfo implements Serializable{
+public class ErrorInfo implements Serializable {
 
-    @JsonProperty("errors")
-    @JsonIgnore
-    private List<String> errors = new ArrayList<String>();
+  @JsonProperty("errors")
+  @JsonIgnore
+  private List<String> errors = new ArrayList<String>();
 
-    @JsonProperty("error")
-    @JsonIgnore
-    private String error;
-    
-    @JsonProperty("exception")
-    @JsonIgnore
-    private String exception;
-    
-    public ErrorInfo() {
-        super();
-    }
+  @JsonProperty("error")
+  @JsonIgnore
+  private String error;
 
-    public ErrorInfo(List<String> errors, String error, String exception) {
-        super();
-        this.errors = errors;
-        this.error = error;
-        this.exception = exception;
-    }
+  @JsonProperty("exception")
+  @JsonIgnore
+  private String exception;
 
-    
-    public List<String> getErrors() {
-        return errors;
-    }
+  public ErrorInfo() {
+    super();
+  }
 
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
-    }
-    
-    public String getError() {
-        return error;
-    }
+  public ErrorInfo(List<String> errors, String error, String exception) {
+    super();
+    this.errors = errors;
+    this.error = error;
+    this.exception = exception;
+  }
 
-    public void setError(String error) {
-        this.error = error;
-    }
 
-    public String getException() {
-      return exception;
-    }
-    
-    public void setException(String exception) {
-      this.exception = exception;
-    }
-    
+  public List<String> getErrors() {
+    return errors;
+  }
 
-    @Override
-    public String toString() {
-        return "[errors=" + errors + ", error=" + error + ", exception=" + exception + "]";
-    }
-    
-    
+  public void setErrors(List<String> errors) {
+    this.errors = errors;
+  }
+
+  public String getError() {
+    return error;
+  }
+
+  public void setError(String error) {
+    this.error = error;
+  }
+
+  public String getException() {
+    return exception;
+  }
+
+  public void setException(String exception) {
+    this.exception = exception;
+  }
+
+
+  @Override
+  public String toString() {
+    return "[errors=" + errors + ", error=" + error + ", exception=" + exception + "]";
+  }
+
+
 
 }

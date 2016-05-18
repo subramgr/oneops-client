@@ -28,8 +28,8 @@ import com.oneops.client.util.OneopsHttpClient;
 public class DeploymentService extends OneopsService {
 
   private static final Logger logger = Logger.getLogger(DeploymentService.class.getName());
-  
-  public DeploymentService(){
+
+  public DeploymentService() {
     super();
   }
 
@@ -37,36 +37,36 @@ public class DeploymentService extends OneopsService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response findDeployment(@QueryParam("organization") String organization,
-                                    @QueryParam("assembly") String assembly,
-                                    @QueryParam("environment") String environment,
-                                    @QueryParam("deploymentId") Long deploymentId,
-                                    @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @QueryParam("deploymentId") Long deploymentId,
+    @Context HttpHeaders headers) {
     Response resp = null;
     try {
       if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment) ||
-          StringUtils.isBlank(""+deploymentId)) {
+        StringUtils.isBlank("" + deploymentId)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
       String depId = String.valueOf(deploymentId);
       String url = organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/deployments/" + depId + "/status";
       resp = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "GET", url, null, true), Deployment.class, "findDeployment");
-      
+
     } catch (Exception e) {
       logger.log(Level.WARNING, "************* Exception occured when finding deployment --> " + e.getMessage());
       return errorJsonResponse("Error occured when finding deployment --> " + e.getMessage());
     }
     return resp;
-    
+
   }
 
   @Path("/get/latest")
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response findLatestDeployment(@QueryParam("organization") String organization,
-                                         @QueryParam("assembly") String assembly,
-                                         @QueryParam("environment") String environment,
-                                         @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @Context HttpHeaders headers) {
     Response resp = null;
     try {
       if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment)) {
@@ -75,7 +75,7 @@ public class DeploymentService extends OneopsService {
       }
       String url = organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/deployments/latest";
       resp = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "GET", url, null, true), Deployment.class, "findLatestDeployment");
-      
+
     } catch (Exception e) {
       logger.log(Level.WARNING, "************* Exception occured when finding latest deployment --> " + e.getMessage());
       return errorJsonResponse("Error occured when finding latest deployment --> " + e.getMessage());
@@ -87,17 +87,17 @@ public class DeploymentService extends OneopsService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response isDeploymentOngoing(@QueryParam("organization") String organization,
-                                     @QueryParam("assembly") String assembly,
-                                     @QueryParam("environment") String environment,
-                                     @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @Context HttpHeaders headers) {
 
     Boolean deploymentOngoing = false;
     try {
-      if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment)){
+      if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
-      Deployment deployment = (Deployment)getEntity(findLatestDeployment(organization, assembly, environment, headers),Deployment.class);
+      Deployment deployment = (Deployment) getEntity(findLatestDeployment(organization, assembly, environment, headers), Deployment.class);
 
       if (deployment != null && deployment.getDeploymentState() != null) {
         if (deployment.getDeploymentState().equalsIgnoreCase(ACTIVE)) {
@@ -121,25 +121,25 @@ public class DeploymentService extends OneopsService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDeploymentStatus(@QueryParam("organization") String organization,
-                                    @QueryParam("assembly") String assembly,
-                                    @QueryParam("environment") String environment,
-                                    @QueryParam("deploymentId") Long deploymentId,
-                                    @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @QueryParam("deploymentId") Long deploymentId,
+    @Context HttpHeaders headers) {
     try {
       if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment) ||
-          StringUtils.isBlank(""+deploymentId)) {
+        StringUtils.isBlank("" + deploymentId)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
       String depId = String.valueOf(deploymentId);
       String url = organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/deployments/" + depId + "/status";
       Response resp = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "GET", url, null, true), Deployment.class, "getDeploymentStatus");
-      Deployment deployment = (Deployment)getEntity(resp, Deployment.class);
-            
-      String deploymentState =  (deployment != null && deployment.getDeploymentState() != null) ? deployment.getDeploymentState() : null;     
+      Deployment deployment = (Deployment) getEntity(resp, Deployment.class);
+
+      String deploymentState = (deployment != null && deployment.getDeploymentState() != null) ? deployment.getDeploymentState() : null;
       return Response.ok(deploymentState).build();
     } catch (Exception e) {
-      logger.log(Level.WARNING, "************* Exception occured when getting deployment status --> " + e.getMessage()); 
+      logger.log(Level.WARNING, "************* Exception occured when getting deployment status --> " + e.getMessage());
       return errorJsonResponse("Error occured when getting deployment status --> " + e.getMessage());
     }
   }
@@ -149,15 +149,15 @@ public class DeploymentService extends OneopsService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response createDeployment(@QueryParam("organization") String organization,
-                                     @QueryParam("assembly") String assembly,
-                                     @QueryParam("environment") String environment,
-                                     @QueryParam("releaseId") Long releaseId,
-                                     @QueryParam("nsPath") String nsPath,
-                                     @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @QueryParam("releaseId") Long releaseId,
+    @QueryParam("nsPath") String nsPath,
+    @Context HttpHeaders headers) {
     Response resp = null;
     try {
       if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment) ||
-        StringUtils.isBlank(""+releaseId) || StringUtils.isBlank(nsPath)) {
+        StringUtils.isBlank("" + releaseId) || StringUtils.isBlank(nsPath)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
@@ -175,7 +175,7 @@ public class DeploymentService extends OneopsService {
     } catch (Exception e) {
       logger.log(Level.WARNING, "************* Exception occured when creating deployment --> " + e.getMessage());
       return errorJsonResponse("Exception occured when creating deployment --> " + e.getMessage());
-      
+
     }
     return resp;
   }
@@ -185,15 +185,15 @@ public class DeploymentService extends OneopsService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response pauseDeployment(@QueryParam("organization") String organization,
-                                  @QueryParam("assembly") String assembly,
-                                  @QueryParam("environment") String environment,
-                                  @QueryParam("releaseId") Long releaseId,
-                                  @QueryParam("deploymentId") Long deploymentId,
-                                  @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @QueryParam("releaseId") Long releaseId,
+    @QueryParam("deploymentId") Long deploymentId,
+    @Context HttpHeaders headers) {
     Deployment deployment = null;
     try {
       if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment) ||
-          StringUtils.isBlank(""+releaseId) || StringUtils.isBlank(""+deploymentId)) {
+        StringUtils.isBlank("" + releaseId) || StringUtils.isBlank("" + deploymentId)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
@@ -206,9 +206,9 @@ public class DeploymentService extends OneopsService {
       payload.put(ATTR_CMS_DEPLOYMENT, payload1);
 
       Response resp = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "PUT", url, payload.toString(), true), Deployment.class, "pauseDeployment");
-      deployment = (resp != null && resp.getEntity() != null && resp.getEntity() instanceof Deployment) 
-                                            ? (Deployment)resp.getEntity() 
-                                            : null;
+      deployment = (resp != null && resp.getEntity() != null && resp.getEntity() instanceof Deployment)
+        ? (Deployment) resp.getEntity()
+        : null;
       Boolean pausedDeployment = (deployment != null && deployment.getDeploymentState() != null && deployment.getDeploymentState().equalsIgnoreCase(PAUSED)) ? true : false;
       return Response.ok(pausedDeployment).build();
     } catch (Exception e) {
@@ -222,19 +222,19 @@ public class DeploymentService extends OneopsService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response cancelDeployment(@QueryParam("organization") String organization,
-                                      @QueryParam("assembly") String assembly,
-                                      @QueryParam("environment") String environment,
-                                      @QueryParam("releaseId") Long releaseId,
-                                      @QueryParam("deploymentId") Long deploymentId,
-                                      @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @QueryParam("releaseId") Long releaseId,
+    @QueryParam("deploymentId") Long deploymentId,
+    @Context HttpHeaders headers) {
     Deployment deployment = null;
     try {
       if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment) ||
-          StringUtils.isBlank(""+releaseId) || StringUtils.isBlank(""+deploymentId)) {
+        StringUtils.isBlank("" + releaseId) || StringUtils.isBlank("" + deploymentId)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
-      
+
       String url = organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/deployments/" + deploymentId;
       JSONObject payload1 = new JSONObject();
       payload1.put(ATTR_RELEASE_ID, releaseId);
@@ -244,21 +244,21 @@ public class DeploymentService extends OneopsService {
       payload.put(ATTR_CMS_DEPLOYMENT, payload1);
 
       Response resp = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "PUT", url, payload.toString(), true), Deployment.class, "cancelDeployment");
-      deployment = (resp != null && resp.getEntity() != null && resp.getEntity() instanceof Deployment) 
-                                    ? (Deployment)resp.getEntity() 
-                                    : null;
+      deployment = (resp != null && resp.getEntity() != null && resp.getEntity() instanceof Deployment)
+        ? (Deployment) resp.getEntity()
+        : null;
       if (deployment != null && deployment.getDeploymentState() != null && deployment.getDeploymentState().equalsIgnoreCase(CANCELED)) {
         logger.info("Deployment with id " + deployment.getDeploymentId() + " cancelled successfully!");
         //return deployment;
         return resp;
       }
-      return errorJsonResponse("Could not cancel deployment "+deploymentId+". Deployment state="+deployment.getDeploymentState());
-      
+      return errorJsonResponse("Could not cancel deployment " + deploymentId + ". Deployment state=" + deployment.getDeploymentState());
+
     } catch (Exception e) {
       logger.log(Level.WARNING, "************* Exception occured when cancelling deployment --> " + e.getMessage());
       return errorJsonResponse("Exception occured when cancelling deployment --> " + e.getMessage());
     }
-    
+
   }
 
   @Path("/cancel/ongoing")
@@ -266,9 +266,9 @@ public class DeploymentService extends OneopsService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response cancelOngoingDeployment(@QueryParam("organization") String organization,
-                                            @QueryParam("assembly") String assembly,
-                                            @QueryParam("environment") String environment,
-                                            @Context HttpHeaders headers) {
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @Context HttpHeaders headers) {
 
     Response response = null;
     if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment)) {
@@ -279,8 +279,8 @@ public class DeploymentService extends OneopsService {
     try {
       logger.info("Fetching latest deployment in order to cancel it..");
       Response response1 = findLatestDeployment(organization, assembly, environment, headers);
-      if (response1.getStatus() == Response.Status.OK.getStatusCode()){
-        deployment = (Deployment)getEntity(response1,Deployment.class);
+      if (response1.getStatus() == Response.Status.OK.getStatusCode()) {
+        deployment = (Deployment) getEntity(response1, Deployment.class);
       }
       if (deployment != null) {
         Long deploymentId = deployment.getDeploymentId();
@@ -294,8 +294,8 @@ public class DeploymentService extends OneopsService {
             logger.info("Pausing active deployment...");
             Response resp = this.pauseDeployment(organization, assembly, environment, releaseId, deploymentId, headers);
             Boolean pauseDeployment = false;
-            if (resp.getStatus() == Response.Status.OK.getStatusCode()){
-              pauseDeployment = (Boolean)getEntity(resp, Boolean.class);
+            if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
+              pauseDeployment = (Boolean) getEntity(resp, Boolean.class);
             }
             logger.info("pauseDeployment = " + pauseDeployment);
 
@@ -306,8 +306,8 @@ public class DeploymentService extends OneopsService {
               logger.info("Waiting 30 sec for deployment to pause...");
               Thread.sleep(30000);
               Response resp1 = this.getDeploymentStatus(organization, assembly, environment, deploymentId, headers);
-              if (resp1.getStatus() == Response.Status.OK.getStatusCode()){
-                deploymentState = (String)getEntity(resp1, String.class);
+              if (resp1.getStatus() == Response.Status.OK.getStatusCode()) {
+                deploymentState = (String) getEntity(resp1, String.class);
               }
               logger.info("deploymentState=" + deploymentState);
               deployment = cancelPausingDeployment(organization, assembly, environment, releaseId, deploymentId, deploymentState, headers);
@@ -336,7 +336,7 @@ public class DeploymentService extends OneopsService {
   private Deployment cancelPausingDeployment(String organization, String assembly, String environment, Long releaseId, Long deploymentId, String deploymentState, HttpHeaders headers) {
 
     if (StringUtils.isBlank(organization) || StringUtils.isBlank(assembly) || StringUtils.isBlank(environment) ||
-       StringUtils.isBlank(""+releaseId) || StringUtils.isBlank(""+deploymentId) || StringUtils.isBlank(deploymentState) ) {
+      StringUtils.isBlank("" + releaseId) || StringUtils.isBlank("" + deploymentId) || StringUtils.isBlank(deploymentState)) {
       logger.info("Required input parameters missing..");
       return null;
     }
@@ -349,8 +349,8 @@ public class DeploymentService extends OneopsService {
           logger.info("Last deployment is in pausing state.....waiting..");
           Thread.sleep(Long.parseLong(DEFAULT_WAIT));
           Response resp = this.getDeploymentStatus(organization, assembly, environment, deploymentId, headers);
-          if (resp.getStatus() == Response.Status.OK.getStatusCode()){
-            deploymentState = (String)getEntity(resp, String.class);
+          if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
+            deploymentState = (String) getEntity(resp, String.class);
           }
           logger.info("depState=" + deploymentState);
         }
@@ -358,7 +358,7 @@ public class DeploymentService extends OneopsService {
       if (deploymentState.equalsIgnoreCase(PAUSED)) {
         logger.info("Last deployment is in paused state, cancelling deployment ...");
         Response resp = this.cancelDeployment(organization, assembly, environment, releaseId, deploymentId, headers);
-        deployment = (Deployment)getEntity(resp, Deployment.class);
+        deployment = (Deployment) getEntity(resp, Deployment.class);
       }
       return deployment;
     } catch (Exception e) {

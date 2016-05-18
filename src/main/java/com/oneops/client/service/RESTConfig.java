@@ -13,27 +13,27 @@ import java.util.logging.Logger;
  * Does not seem to be needed
  */
 //@ApplicationPath("/rest")
-public class RESTConfig extends Application{
-    
-    private static final Logger logger = Logger.getLogger(RESTConfig.class.getName());
-   
-    private final Set<Class<?>> classes;
+public class RESTConfig extends Application {
 
-    public RESTConfig() {
-        logger.info("@@@@@ Inside RESTConfig...");
-        HashSet<Class<?>> c = new HashSet<>();
-        c.add(VariableService.class);
-        c.add(EnvironmentService.class);
-        c.add(DeploymentService.class);
-        c.add(PlatformService.class);
-        classes = Collections.unmodifiableSet(c);
-        
-    }
+  private static final Logger logger = Logger.getLogger(RESTConfig.class.getName());
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        logger.info("@@@@@ Inside RESTConfig...getClasses()..");
-        return classes;
-    }
-    
+  private final Set<Class<?>> classes;
+
+  public RESTConfig() {
+    logger.info("@@@@@ Inside RESTConfig...");
+    HashSet<Class<?>> c = new HashSet<>();
+    c.add(VariableService.class);
+    c.add(EnvironmentService.class);
+    c.add(DeploymentService.class);
+    c.add(PlatformService.class);
+    classes = Collections.unmodifiableSet(c);
+
+  }
+
+  @Override
+  public Set<Class<?>> getClasses() {
+    logger.info("@@@@@ Inside RESTConfig...getClasses()..");
+    return classes;
+  }
+
 }

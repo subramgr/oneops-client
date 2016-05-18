@@ -36,11 +36,11 @@ public class VariableService extends OneopsService {
 
   @Inject
   private ComponentService componentService = new ComponentService(); //TODO: injection does not seem to work so instantiating directly! Need to check and fix
-  
+
   public VariableService() {
     super();
   }
-  
+
   /*
    * 
    * URL format: /find?organization=foo&assembly=bar&environment=foo1&platform=bar1&variableName=appVersion
@@ -50,37 +50,37 @@ public class VariableService extends OneopsService {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public Response findVariable(@QueryParam("organization") String organization,
-                               @QueryParam("assembly") String assembly,
-                               @QueryParam("environment") String environment,
-                               @QueryParam("platform") String platform, 
-                               @QueryParam("variableName") String variableName,
-                               @Context HttpHeaders headers){                     
+    @QueryParam("assembly") String assembly,
+    @QueryParam("environment") String environment,
+    @QueryParam("platform") String platform,
+    @QueryParam("variableName") String variableName,
+    @Context HttpHeaders headers) {
 
     Response response = null;
     try {
-      
+
       logger.info("************* Inside findVariable() ***********");
-      
-      if (headers == null){
+
+      if (headers == null) {
         logger.info("Oneops URL and API token not specified!");
         return errorJsonResponse("Oneops URL and API token not specified!");
       }
-      
-      if (!validateRequiredParameters(organization,assembly,environment,platform) || StringUtils.isBlank(variableName)) {
+
+      if (!validateRequiredParameters(organization, assembly, environment, platform) || StringUtils.isBlank(variableName)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
 
       String url = organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/platforms/" + platform + "/variables/" + variableName;
-      response =  this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "GET", url, null, true), Variable.class, "findvariable");
-      
+      response = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "GET", url, null, true), Variable.class, "findvariable");
+
     } catch (Exception e) {
       logger.log(Level.WARNING, "************* Exception occured when finding variable --> " + e.getMessage());
       return errorJsonResponse("Error occured when finding variable --> " + e.getMessage());
     }
     return response;
   }
-  
+
 
   /*
    * 
@@ -90,44 +90,44 @@ public class VariableService extends OneopsService {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response updateVariables(@Context UriInfo info, @Context HttpHeaders headers){
+  public Response updateVariables(@Context UriInfo info, @Context HttpHeaders headers) {
 
     List<Variable> variables = new ArrayList<Variable>();
     Boolean variablesUpdated = false;
-    
+
     try {
-      
+
       logger.info("************* Inside updateVariables() ***********");
-      
+
       String organization = info.getQueryParameters().getFirst(ORGANIZATION);
       String assembly = info.getQueryParameters().getFirst(ASSEMBLY);
       String environment = info.getQueryParameters().getFirst(ENVIRONMENT);
       String platform = info.getQueryParameters().getFirst(PLATFORM);
       String varsString = info.getQueryParameters().getFirst(VARIABLES);
-      
-      if (!validateRequiredParameters(organization,assembly,environment,platform) || StringUtils.isBlank(varsString)) {
+
+      if (!validateRequiredParameters(organization, assembly, environment, platform) || StringUtils.isBlank(varsString)) {
         logger.info("Required input parameters missing..");
         return errorJsonResponse("Required input parameters missing..");
       }
 
       if (varsString != null) {
         String[] vars = varsString.split(",");
-        
+
         //Example: Array vars= {appVersion:1.0.1,repository:devtools}
         for (String var : vars) {
           //Example: var = appVersion:1.0.1
           String variableName = (var != null && var.split(":").length == 2) ? var.split(":")[0] : null;
           String variableValue = (var != null && var.split(":").length == 2) ? var.split(":")[1] : null;
           logger.info("variableName=" + variableName + ", variableValue=" + variableValue);
-          
+
           if (variableName != null && !variableName.isEmpty()) {
             Response findVarResponse = findVariable(organization, assembly, environment, platform, variableName, headers);
             Object obj = findVarResponse.getEntity();
             Variable variable = null;
-            if (obj != null){
-              if (obj instanceof Variable){ 
+            if (obj != null) {
+              if (obj instanceof Variable) {
                 variable = (Variable) obj;
-              }else{
+              } else {
                 return findVarResponse;
               }
             }
@@ -144,26 +144,26 @@ public class VariableService extends OneopsService {
 
               payload.put("cms_dj_ci", new JSONObject(varJson));
               //logger.info("Inside updateVariable() method, jsonPayload=" + varJson + ",payload=" + payload.toString());
-              logger.info("Updating variable "+variableName+" with value +"+variableValue+" in Oneops");
+              logger.info("Updating variable " + variableName + " with value +" + variableValue + " in Oneops");
               Response resp = this.processOneopsResponse(OneopsHttpClient.sendRequest(fetchOneopsConfig(headers), "PUT", url, payload.toString(), true), Variable.class, "updateVariable");
-              variable = (resp != null && resp.getEntity() != null && resp.getEntity() instanceof Variable) 
-                                    ? (Variable)resp.getEntity() 
-                                    : null;
-              if (variablesUpdated != null){
+              variable = (resp != null && resp.getEntity() != null && resp.getEntity() instanceof Variable)
+                ? (Variable) resp.getEntity()
+                : null;
+              if (variablesUpdated != null) {
                 variables.add(variable);
                 variablesUpdated = true;
               }
-              
+
             }
           }
         }
       }
-      
-      if (!variablesUpdated){
+
+      if (!variablesUpdated) {
         logger.info("Variable update did not happen, new values same as current values..doing a touch of components so that commit & deploy can happen..");
         String components = info.getQueryParameters().getFirst(COMPONENTS);
         Response resp = componentService.touchComponents(organization, assembly, environment, platform, components, headers);
-        if (resp.getStatus() != 200){
+        if (resp.getStatus() != 200) {
           return resp;
         }
       }
@@ -192,7 +192,7 @@ public class VariableService extends OneopsService {
           logger.info("************* Inside updateVariable() ***********");
           variable = findVariable(organization, assembly,environment, platform, variableName);
           String url =  organization + "/assemblies/"+assembly+"/transition/environments/"+environment+"/platforms/"+platform+"/variables/"+variable.getCiId();
-
+  
           JSONObject payload = new JSONObject();
           if (variable != null && variable.getCiAttributes() != null) {
               variable.getCiAttributes().setValue(variableValue);
@@ -211,8 +211,8 @@ public class VariableService extends OneopsService {
       }
       return variable;
   }*/
-  
-  
+
+
   /*@Path("/hello")
   @GET
   @Produces(MediaType.TEXT_PLAIN)
