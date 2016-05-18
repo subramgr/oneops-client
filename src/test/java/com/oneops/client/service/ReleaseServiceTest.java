@@ -15,27 +15,27 @@ import org.junit.Test;
 import com.oneops.client.model.Release;
 
 @Ignore
-public class ReleaseServiceTest extends BaseTest{
-  
+public class ReleaseServiceTest extends BaseTest {
+
   private static final Logger logger = Logger.getLogger(ReleaseServiceTest.class.getName());
-  private String releaseUrl = "http://localhost:"+port+"/release";
-  
+  private String releaseUrl = "http://localhost:" + port + "/release";
+
   @Test
   public void testFindReleaseBom() throws Exception {
     logger.info("###################################   testFindReleaseBom()");
-    
-    ResteasyWebTarget target = client.target(releaseUrl+"/bom/get")
-                                    .queryParam("organization", oneopsOrg)
-                                    .queryParam("assembly", oneopsAssembly)
-                                    .queryParam("environment", oneopsEnv);
-    
-    logger.info("Final url="+target.getUri().toString());
+
+    ResteasyWebTarget target = client.target(releaseUrl + "/bom/get")
+      .queryParam("organization", oneopsOrg)
+      .queryParam("assembly", oneopsAssembly)
+      .queryParam("environment", oneopsEnv);
+
+    logger.info("Final url=" + target.getUri().toString());
 
     Invocation.Builder builder = setHeadersAndGetBuilder(target);
-    Response response = builder.get(); 
+    Response response = builder.get();
     assertNotNull(response);
-    assertEquals(200,response.getStatus());
+    assertEquals(200, response.getStatus());
     assertNotNull(response.readEntity(Release.class));
-      
+
   }
 }
