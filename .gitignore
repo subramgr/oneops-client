@@ -1,0 +1,19 @@
+# Eclude Eclipse files that can be generated with mvn eclipse:eclipse
+.classpath
+.project
+.settings/
+target/
+work/
+
+# Exclude IntelliJ files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Exclude Vagrant generated files
+.vagrant/
+
+# Exclude vim swap files
+*.swp
+*.swo
