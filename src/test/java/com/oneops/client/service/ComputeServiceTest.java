@@ -11,8 +11,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.oneops.client.model.Compute;
-import com.oneops.client.model.Deployment;
-import com.oneops.client.model.Environment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Unit test for 'Environment' APIs 
  */
-//@Ignore
+@Ignore
 public class ComputeServiceTest extends BaseTest {
 
   private static final Logger logger = Logger.getLogger(ComputeServiceTest.class.getName());

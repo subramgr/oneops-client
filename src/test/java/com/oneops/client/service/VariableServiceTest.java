@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Unit test for 'Variable' APIs 
  */
-//@Ignore
+@Ignore
 public class VariableServiceTest extends BaseTest {
 
   private static final Logger logger = Logger.getLogger(VariableServiceTest.class.getName());
