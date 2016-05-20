@@ -28,8 +28,7 @@ OneOpsClient client = OneOpsClient.builder()
   .baseUrl("https://oneops.prod.walmart.com")
   .apiToken("XXX")
   .build();
-      // https://oneops.prod.walmart.com/platform/assemblies/TestDevtoolsNexus/operations/environments/PerfTest/platforms/Java/components/116135078/instances.json?instances_state=all
-
+     
 List<String> ips = client.computeIps(
   "platform", // organization
   "TestDevtoolsNexus", // assembly
