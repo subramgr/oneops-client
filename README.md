@@ -9,7 +9,8 @@ This library provides REST endpoints for several Oneops features such as:
 
 ### Building and running tests:
 For unit tests to run, some parameters have to be passed as shown below:
-- `mvn clean install -DONEOPS_ENDPOINT=<Oneops-endpoint> \
+```
+mvn clean install -DONEOPS_ENDPOINT=<Oneops-endpoint> \
                   -DONEOPS_API_TOKEN=<Oneops-Api-token> \
                   -DONEOPS_ORG=<Oneops-organization-name> \
                   -DONEOPS_ASSEMBLY=<Oneops-assembly-name> \
@@ -17,12 +18,12 @@ For unit tests to run, some parameters have to be passed as shown below:
                   -DONEOPS_PLATFORM=<Oneops-platform-name> \
                   -DONEOPS_USER_ID=<Oneops-user-id> \
                   -DONEOPS_COMPONENTS=<Oneops-component-name> \
-                  -DONEOPS_VARIABLES=<Oneops-variable-to-be-updated>`
-
+                  -DONEOPS_VARIABLES=<Oneops-variable-to-be-updated>
+```
 
 ## Gather IPs of Computes
 
-```
+```java
 OneOpsClient client = OneOpsClient.builder()
   .baseUrl("https://oneops.prod.walmart.com")
   .apiToken("XXX")
