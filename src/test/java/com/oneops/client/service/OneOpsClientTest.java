@@ -16,13 +16,11 @@ public class OneOpsClientTest {
   @Test
   public void getComputeInstances() throws Exception {
     OneOpsClient client = OneOpsClient.builder()
-      .baseUrl("baseUrl")
-      //.username("username")
-      //.password("password")
-      .apiToken("apiToken")
+      .baseUrl("https://oneops.prod.walmart.com")
+      .apiToken("XXX")
       .build();
     
-    List<Compute> instances = client.computeInstances("organization", "assembly", "environment", "platform", "componentName");
+    List<Compute> instances = client.computeInstances("platform", "TestDevtoolsNexus", "PerfTest", "Java", "116135078");
     assertNotNull(instances);
     assertTrue(instances.size()>0);
     
@@ -31,15 +29,13 @@ public class OneOpsClientTest {
   @Test
   public void getComputeIps() throws Exception {
     OneOpsClient client = OneOpsClient.builder()
-      .baseUrl("baseUrl")
-      //.username("username")
-      //.password("password")
-      .apiToken("apiToken")
+      .baseUrl("https://oneops.prod.walmart.com")
+      .apiToken("XXX")
       .build();
     
-    List<String> ips = client.computeIps("organization", "assembly", "environment", "platform", "componentName");
+    List<String> ips = client.computeIps("platform", "TestDevtoolsNexus", "PerfTest", "Java", "116135078");
     assertNotNull(ips);
     assertTrue(ips.size()>0);
-    
+    System.out.println(ips);
   }
 }

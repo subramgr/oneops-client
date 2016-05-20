@@ -45,6 +45,7 @@ public class OneOpsClient {
     this.mapper = new ObjectMapper();
   }
 
+  // https://oneops.prod.walmart.com/platform/assemblies/TestDevtoolsNexus/operations/environments/PerfTest/platforms/Java/components/116135078/instances.json?instances_state=all
   public List<Compute> computeInstances(String organization, String assembly, String environment, String platform, String componentName) throws IOException {
     List<Compute> instances = new ArrayList<Compute>();
     
