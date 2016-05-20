@@ -18,3 +18,22 @@ For unit tests to run, some parameters have to be passed as shown below:
                   -DONEOPS_USER_ID=<Oneops-user-id> \
                   -DONEOPS_COMPONENTS=<Oneops-component-name> \
                   -DONEOPS_VARIABLES=<Oneops-variable-to-be-updated>`
+
+
+## Gather IPs of Computes
+
+```
+OneOpsClient client = OneOpsClient.builder()
+  .baseUrl("https://oneops.prod.walmart.com")
+  .apiToken("XXX")
+  .build();
+      // https://oneops.prod.walmart.com/platform/assemblies/TestDevtoolsNexus/operations/environments/PerfTest/platforms/Java/components/116135078/instances.json?instances_state=all
+
+List<String> ips = client.computeIps(
+  "platform", // organization
+  "TestDevtoolsNexus", // assembly
+  "PerfTest",  // environment
+  "Java", // platform
+  "116135078" // componentName
+);
+```
