@@ -1,25 +1,11 @@
 # oneops-client
 
-This library provides REST endpoints for several Oneops features such as:
+This library provides a client for several Oneops features such as:
 - Find variables, environments, platforms, components
 - Update variables
 - Commit and deploy to an environment
 - Get deployment status, pause and cancel deployments
 - Find details of computes in an environment
-
-### Building and running tests:
-For unit tests to run, some parameters have to be passed as shown below:
-```
-mvn clean install -DONEOPS_ENDPOINT=<Oneops-endpoint> \
-                  -DONEOPS_API_TOKEN=<Oneops-Api-token> \
-                  -DONEOPS_ORG=<Oneops-organization-name> \
-                  -DONEOPS_ASSEMBLY=<Oneops-assembly-name> \
-                  -DONEOPS_ENVIRONMENT=<Oneops-environment-name> \
-                  -DONEOPS_PLATFORM=<Oneops-platform-name> \
-                  -DONEOPS_USER_ID=<Oneops-user-id> \
-                  -DONEOPS_COMPONENTS=<Oneops-component-name> \
-                  -DONEOPS_VARIABLES=<Oneops-variable-to-be-updated>
-```
 
 ## Gather IPs of Computes
 
@@ -34,6 +20,36 @@ List<String> ips = client.computeIps(
   "TestDevtoolsNexus", // assembly
   "PerfTest",  // environment
   "Java", // platform
-  "116135078" // componentName
+  "compute" // componentName
 );
+```
+
+## Deploy an artifact version to an environment
+
+```java
+OneOpsClient client = OneOpsClient.builder()
+  .baseUrl("https://oneops.prod.walmart.com")
+  .apiToken("XXX")
+  .build();
+     
+Variable variable = client.updateVariable(
+	"platform", // organization
+	"TestDevtoolsNexus", // assembly
+	"PerfTest", // environment
+	"Java", // platform
+	"appVersion", // variableName
+	"1.0.8-SNAPSHOT", // variableValue (this is the only value that needs to be changed every time a deployment is being done!)
+	"artifact" // name of component to be touched (in case variable value is same as previous value)
+); 
+    
+Deployment deployment = client.commitAndDeploy(
+	"platform", // organization
+	"TestDevtoolsNexus", // assembly
+	"PerfTest", // environment
+	"Java", // platform
+	true, // cancel an ongoing active deployment 
+	true, // deploy to all platforms or not
+	null, // list of platforms to be deployed to in case deployAllPlatforms is false
+	"30000" // pollFrequency - wait time in milliseconds before checking for deployment status
+	);
 ```
