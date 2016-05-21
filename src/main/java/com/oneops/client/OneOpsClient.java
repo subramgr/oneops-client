@@ -616,7 +616,9 @@ public class OneOpsClient {
           Long deploymentId = deployment.getDeploymentId();
           String deploymentState = deployment.getDeploymentState();
           logger.info("deploymentId=" + deploymentId + ", deploymentState=" + deploymentState);
-
+          if (deploymentId == null){
+            return null;
+          }
           if (deploymentState == null) {
             logger.info("Error occurred during deployment, cancelling deployment ...");
             deployment = cancelDeployment(organization, assembly, environment, bomReleaseId, deploymentId);
