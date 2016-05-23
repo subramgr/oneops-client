@@ -31,9 +31,10 @@ OneOpsClient client = OneOpsClient.builder()
   .baseUrl("https://oneops.prod.walmart.com")
   .apiToken("XXX")
   .build();
- 
+``` 
  
 ##### Update artifact repository in Nexus (if needed)  
+```java
 Variable variable = client.updateVariable(
 	"platform", // organization
 	"TestDevtoolsNexus", // assembly
@@ -43,8 +44,10 @@ Variable variable = client.updateVariable(
 	"public_snapshot", // variableValue 
 	"artifact" // name of component to be touched (in case variable value is same as previous value)
 );
+```
 
 ##### Update artifact version    
+```java
 Variable variable = client.updateVariable(
 	"platform", // organization
 	"TestDevtoolsNexus", // assembly
