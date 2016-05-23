@@ -123,7 +123,7 @@ public class OneOpsClient {
     logger.info("find variable url=" + url);
 
     Request request = requestBuilder().url(url).get().build();
-    Response response = client.newCall(request).execute();
+    Response response = client.newCall(request).execute(); 
     return (Variable) getResult(response, Variable.class);
 
   }
@@ -335,7 +335,7 @@ public class OneOpsClient {
 
       logger.info("platforms to be deployed to=" + platformNames);
 
-      List<Platform> platforms = getAllPlatforms(organization, assembly, environment);
+      List<Platform> platforms = findAllPlatforms(organization, assembly, environment);
       boolean found = false;
       for (Platform p : platforms) {
 
@@ -358,13 +358,36 @@ public class OneOpsClient {
     return platformIds;
   }
 
-  public List<Platform> getAllPlatforms(String organization, String assembly, String environment) throws Exception {
+  public List<Platform> findAllPlatforms(String organization, String assembly, String environment) throws Exception {
 
     String url = baseUrl + "/" + organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/platforms";
     logger.info("get all platforms url=" + url);
     Request request = requestBuilder().url(url).get().build();
     Response response = client.newCall(request).execute();
     return (List<Platform>) getResult(response, Platform[].class);
+  }
+  
+  public List<Long> findAllPlatformIds(String organization, String assembly, String environment) throws Exception {
+
+    List<Long> platformIds = new ArrayList<Long>();
+    List<Platform> allPlatforms = (List<Platform>) this.findAllPlatforms(organization, assembly, environment);
+    if (allPlatforms != null) {
+      for (Platform p : allPlatforms) {
+        platformIds.add(p.getCiId());
+      }
+    } else {
+      logger.info("List of platforms is null");
+    }
+    return platformIds;
+  }
+  
+  public Platform findPlatform(String organization, String assembly, String environment, String platform) throws Exception {
+
+    String url = baseUrl + "/" + organization + "/assemblies/" + assembly + "/transition/environments/" + environment + "/platforms/" + platform;
+    logger.info("get all platforms url=" + url);
+    Request request = requestBuilder().url(url).get().build();
+    Response response = client.newCall(request).execute();
+    return (Platform) getResult(response, Platform.class);
   }
 
   public List<Component> touchComponents(String organization, String assembly, String environment, String platform, String components) throws Exception {

@@ -42,7 +42,7 @@ public class OneOpsClientTest {
     logger.info(ips.toString());
   }
   
-  @Test
+  //@Test
   public void findVariable() throws Exception {
     OneOpsClient client = OneOpsClient.builder()
       .baseUrl("https://oneops.prod.walmart.com")
@@ -64,7 +64,7 @@ public class OneOpsClientTest {
     Variable variable = client.updateVariable("platform", "TestDevtoolsNexus", "PerfTest", "Java", "appVersion", "1.0.8-SNAPSHOT","artifact");
     assertNotNull(variable); 
     logger.info("variable="+variable);
-  }
+  } 
   
   @Test
   public void commitAndDeploy() throws Exception {
@@ -73,7 +73,8 @@ public class OneOpsClientTest {
       .apiToken("XXX")
       .build();
     
-    Variable variable = client.updateVariable("platform", "TestDevtoolsNexus", "PerfTest", "Java", "appVersion", "1.0.8-SNAPSHOT","artifact");
+    //Variable variable1 = client.updateVariable("platform", "TestDevtoolsNexus", "PerfTest", "Java", "repository", "public_snapshot","artifact");
+    Variable variable2 = client.updateVariable("platform", "TestDevtoolsNexus", "PerfTest", "Java", "appVersion", "1.0.8-SNAPSHOT","artifact");
     
     Deployment deployment = client.commitAndDeploy("platform", "TestDevtoolsNexus", "PerfTest", "Java", true, true, null, "30000");
     assertNotNull(deployment);
