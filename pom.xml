@@ -16,6 +16,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <takari.javaSourceVersion>1.8</takari.javaSourceVersion>
+    <takari.javaSourceVersion>1.8</takari.javaSourceVersion>
+    <maven.compiler.source>${takari.javaSourceVersion}</maven.compiler.source>
+    <maven.compiler.target>${takari.javaSourceVersion}</maven.compiler.target>
   </properties>
   <dependencies>
     <dependency>
