@@ -1,22 +1,20 @@
 package com.oneops.client;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONObject;
 
 import com.google.common.io.CharStreams;
 import com.oneops.client.model.Component;
 import com.oneops.client.model.Compute;
 import com.oneops.client.model.Deployment;
 import com.oneops.client.model.Environment;
+import com.oneops.client.model.ErrorInfo;
 import com.oneops.client.model.Platform;
 import com.oneops.client.model.Release;
 import com.oneops.client.model.Variable;
@@ -26,6 +24,10 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 
 public class OneOpsClient {
 
@@ -84,7 +86,6 @@ public class OneOpsClient {
     Request request = requestBuilder().url(instancesUrl).get().build();
     Response response = client.newCall(request).execute();
     return (List<Compute>) getResult(response, Compute[].class);
-
   }
 
   private Object getResult(Response response, Class modelClass) throws Exception {
@@ -92,6 +93,15 @@ public class OneOpsClient {
 
     try (ResponseBody responseBody = response.body(); final Reader inr = responseBody.charStream()) {
       String jsonOutput = CharStreams.toString(inr);
+      if (!response.isSuccessful()) {
+        try {
+          throw new IllegalStateException(response.code() + " " + parseErrors(jsonOutput));
+        }
+        catch (IOException e) {
+          throw new IllegalStateException(response.code() + " " + jsonOutput);
+        }
+      }
+
       if (modelClass.isArray()) {
         List<Object> respList = new ArrayList<Object>();
         Object[] arrObjects = (Object[]) mapper.readValue(jsonOutput, modelClass);
@@ -105,6 +115,21 @@ public class OneOpsClient {
       throw e;
     }
     return result;
+  }
+
+  private Collection<String> parseErrors(final String jsonOutput) throws IOException {
+    ErrorInfo errorInfo = mapper.readValue(jsonOutput, ErrorInfo.class);
+    Collection<String> errors = new ArrayList<>();
+    if (errorInfo.getErrors() != null) {
+      errors.addAll(errorInfo.getErrors());
+    }
+    if (errorInfo.getError() != null) {
+      errors.add(errorInfo.getError());
+    }
+    if (errorInfo.getException() != null) {
+      errors.add(errorInfo.getException());
+    }
+    return errors;
   }
 
   public List<String> computeIps(String organization, String assembly, String environment, String platform, String componentName) throws Exception {
